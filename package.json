@@ -14,12 +14,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Dwaynekj/Adhoc.git"
+    "url": "git+https://github.com/Dwaynekj/reset.git"
   },
   "author": "dwayne@openfin.co",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Dwaynekj/Adhoc/issues"
+    "url": "https://github.com/Dwaynekj/reset/issues"
   },
-  "homepage": "https://github.com/Dwaynekj/Adhoc#readme"
+  "homepage": "https://github.com/Dwaynekj/reset#readme"
 }
