@@ -6,10 +6,10 @@ var watch = require('watch'),
     exec = require('child_process').exec,
     usage = 'reset.js --version <VERSION> --config <Config PATH> [-r]',
     asarBuildFolder = 'Z:\\Projects\\runtime-core',
-    version = argv['--version'],
-    launchConfig = argv['--config'],
-    reset = argv['-r'],
-    help = argv['-h'],
+    version = argv['version'],
+    launchConfig = argv['config'],
+    reset = argv['r'],
+    help = argv['h'],
     completionTrigger = asarBuildFolder + '\\staging\\core\\package.json', //currently the last thing in the grunt build-dev to get moved
     artifact = asarBuildFolder + '\\staging\\core',
     ofApp = 'C:\\Users\\Dwaynekj\\AppData\\Local\\OpenFin\\runtime\\' + version + '\\OpenFin\\resources\\default_app',
@@ -20,11 +20,12 @@ var watch = require('watch'),
     launchCommand = launcher + ' -l -c --startup-url="' +launchConfig+ '"';
 
 if (help || !version || !launchConfig) {
+  console.log(argv);
   console.log(usage);
   return
 }
 
-//watch.watchTree(asarBuildFolder, function() {
+if (reset){
     if (fs.existsSync(completionTrigger)) {
         if (fs.existsSync(ofApp)) {
           wrench.rmdirSyncRecursive(ofApp, false);
@@ -46,26 +47,24 @@ if (help || !version || !launchConfig) {
             // include: regexpOrFunction, // An include filter (either a regexp or a function)
             // exclude: regexpOrFunction // An exclude filter (either a regexp or a function)
         });
-        console.log('default_app updated!');
-
-      }
-      if (reset) {
-        exec(killProcesses, function(error, stdout, stderr) {
-            console.log(killProcesses);
-            console.log(stdout);
-            console.log(stderr);
-            if (fs.existsSync(ofCache)) {
-                wrench.rmdirSyncRecursive(ofCache, false);
-                console.log("deleted cache");
-            }
-
-            if (launchConfig){
-              console.log(launchCommand);
-              exec(launchCommand, function(error, stdout, stderr) {
-                  console.log(stdout);
-                  console.log(stderr);
-              });
-            }
-        });
+    console.log('default_app updated!');
     }
-//});
+}
+
+exec(killProcesses, function(error, stdout, stderr) {
+    console.log(killProcesses);
+    console.log(stdout);
+    console.log(stderr);
+    if (fs.existsSync(ofCache)) {
+        wrench.rmdirSyncRecursive(ofCache, false);
+        console.log("deleted cache");
+    }
+
+    if (launchConfig){
+      console.log(launchCommand);
+      exec(launchCommand, function(error, stdout, stderr) {
+          console.log(stdout);
+          console.log(stderr);
+      });
+    }
+});
