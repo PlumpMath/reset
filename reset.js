@@ -1,10 +1,15 @@
 var watch = require('watch'),
     fs = require('fs'),
     wrench = require('wrench'),
+    minimist = require('minimist'),
+    argv = require('minimist')(process.argv.slice(2)),
     exec = require('child_process').exec,
+    usage = 'reset.js --version <VERSION> --config <Config PATH> [-r]',
     asarBuildFolder = 'Z:\\Projects\\runtime-core',
-    version = process.argv[2],
-    launchConfig = process.argv[3],
+    version = argv['--version'],
+    launchConfig = argv['--config'],
+    reset = argv['-r'],
+    help = argv['-h'],
     completionTrigger = asarBuildFolder + '\\staging\\core\\package.json', //currently the last thing in the grunt build-dev to get moved
     artifact = asarBuildFolder + '\\staging\\core',
     ofApp = 'C:\\Users\\Dwaynekj\\AppData\\Local\\OpenFin\\runtime\\' + version + '\\OpenFin\\resources\\default_app',
@@ -13,6 +18,11 @@ var watch = require('watch'),
     killProcesses = 'taskkill /f /im "openfin.exe" /T',
     launcher = 'C:\\Users\\Dwaynekj\\AppData\\Local\\OpenFin\\runtime\\' + version + '\\OpenFin\\openfin.exe',
     launchCommand = launcher + ' -l -c --startup-url="' +launchConfig+ '"';
+
+if (help || !version || !launchConfig) {
+  console.log(usage);
+  return
+}
 
 //watch.watchTree(asarBuildFolder, function() {
     if (fs.existsSync(completionTrigger)) {
@@ -37,6 +47,9 @@ var watch = require('watch'),
             // exclude: regexpOrFunction // An exclude filter (either a regexp or a function)
         });
         console.log('default_app updated!');
+
+      }
+      if (reset) {
         exec(killProcesses, function(error, stdout, stderr) {
             console.log(killProcesses);
             console.log(stdout);
